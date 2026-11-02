@@ -1,0 +1,363 @@
+
+.configuracion {
+  width: 100%;
+  color: var(--color-text);
+}
+
+.config-header {
+  margin-bottom: 25px;
+}
+
+.config-header h1 {
+  margin: 0;
+  font-size: 29px;
+  color: var(--color-text);
+}
+
+.config-header p {
+  margin: 6px 0 0;
+  color: var(--color-text-secondary);
+}
+
+.config-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.config-tabs button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 48px;
+  padding: 11px 18px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.config-tabs button.seleccionada {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.config-contenido {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(280px, 1fr);
+  gap: 20px;
+}
+
+.config-card {
+  padding: 23px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  box-shadow: 0 3px 12px rgba(12, 35, 64, 0.04);
+}
+
+.config-card h2 {
+  margin: 0 0 20px;
+  font-size: 19px;
+}
+
+.config-card p {
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.config-card label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 17px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.config-card input,
+.config-card select {
+  width: 100%;
+  min-height: 43px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-weight: 400;
+}
+
+.config-card input:focus,
+.config-card select:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+}
+
+.config-dos-columnas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.config-columna-derecha {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.config-vista-logo {
+  display: grid;
+  place-items: center;
+  min-height: 155px;
+  margin: 16px 0;
+  padding: 15px;
+  border: 1px dashed var(--color-border);
+  border-radius: 10px;
+  background: var(--color-background);
+}
+
+.config-vista-logo img {
+  max-width: 100%;
+  max-height: 135px;
+  object-fit: contain;
+}
+
+.config-logo-vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-secondary);
+}
+
+.config-botones-logo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.config-botones-logo button,
+.config-acciones button {
+  min-height: 42px;
+  padding: 10px 15px;
+  border-radius: 9px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.config-btn-secundario {
+  border: 1px solid var(--color-primary);
+  background: transparent;
+  color: var(--color-primary);
+}
+
+.config-btn-claro {
+  border: 1px solid var(--color-border);
+  background: var(--color-background);
+  color: var(--color-text);
+}
+
+.config-btn-guardar {
+  border: 1px solid var(--color-primary);
+  background: var(--color-primary);
+  color: white;
+}
+
+.config-sede {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 9px;
+  background: var(--color-background);
+}
+
+.config-sede span {
+  color: var(--color-success);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.config-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--color-border);
+}
+
+.config-seccion {
+  max-width: 850px;
+}
+
+.config-rol {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 15px;
+  margin-top: 12px;
+  border-radius: 9px;
+  background: var(--color-background);
+}
+
+.config-rol span,
+.config-nota {
+  color: var(--color-text-secondary);
+  font-size: 14px;
+}
+
+.config-alerta {
+  padding: 12px 15px;
+  margin-bottom: 16px;
+  border-radius: 9px;
+  font-size: 14px;
+}
+
+.config-alerta.error {
+  background: #feecec;
+  color: #a32929;
+}
+
+.config-alerta.exito {
+  background: #e8f7ee;
+  color: #176b3a;
+}
+
+.config-cargando {
+  padding: 25px;
+  color: var(--color-text-secondary);
+}
+
+.config-botones-logo button:disabled,
+.config-acciones button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+/* BOTONES DE USUARIOS */
+.config-btn-crear-usuario,
+.config-btn-cancelar-usuario {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 11px 20px;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.config-btn-crear-usuario {
+  border: 1px solid var(--color-primary);
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.config-btn-crear-usuario:hover {
+  filter: brightness(0.9);
+  transform: translateY(-1px);
+}
+
+.config-btn-cancelar-usuario {
+  border: 1px solid var(--color-border);
+  background: var(--color-background);
+  color: var(--color-text);
+}
+
+.config-btn-cancelar-usuario:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* CAMPO DE CONTRASEÑA */
+.config-password-contenedor {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.config-password-contenedor input {
+  padding-right: 48px;
+}
+
+.config-password-toggle {
+  position: absolute;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.config-password-toggle:hover {
+  background: var(--color-background);
+  color: var(--color-primary);
+}
+
+/* TARJETAS DE USUARIOS */
+.config-usuario-card {
+  padding: 19px;
+  margin-top: 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-background);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.config-usuario-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 12px rgba(12, 35, 64, 0.06);
+}
+
+.config-usuario-card strong {
+  font-size: 15px;
+  color: var(--color-text);
+}
+
+@media (max-width: 900px) {
+  .config-contenido {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .config-tabs {
+    flex-direction: column;
+  }
+
+  .config-tabs button {
+    width: 100%;
+  }
+
+  .config-dos-columnas {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .config-acciones {
+    flex-direction: column-reverse;
+  }
+
+  .config-acciones button {
+    width: 100%;
+  }
+}
+

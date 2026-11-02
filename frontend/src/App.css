@@ -1,0 +1,27 @@
+
+/* Estilos generales de Óptica Ocadhas */
+
+.app {
+  min-height: 100vh;
+  background: var(--color-background);
+  color: var(--color-text);
+}
+
+.app-container {
+  width: min(
+    calc(100% - 2 * var(--space-6)),
+    var(--container-max-width)
+  );
+  margin-inline: auto;
+}
+
+.text-muted {
+  color: var(--color-text-secondary);
+}
+
+.surface {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}

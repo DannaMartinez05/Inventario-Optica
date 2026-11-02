@@ -1,0 +1,15 @@
+# Variables privadas
+.env
+.env.*
+!.env.example
+
+# Dependencias
+node_modules/
+
+# Archivos generados
+dist/
+.vite/
+
+# Logs
+*.log
+npm-debug.log*
