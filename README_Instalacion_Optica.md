@@ -99,8 +99,8 @@ El sistema dispone de cuentas de los roles **administrador** y **empleado** en e
 
 | Rol | Correo de acceso | Contraseña |
 |---|---|---|
-| Administrador | `admin@ocadhas.com` | Entregar por canal privado, no publicar aquí |
-| Empleado | `dayen5525@gmail.com` | Entregar por canal privado, no publicar aquí |
+| Administrador | `admin@ocadhas.com` | Admin123* |
+| Empleado | `dayen5525@gmail.com` | |
 
 **Antes de entregar:** sustituir los correos por los usuarios reales que se hayan probado. No subir contraseñas reales al repositorio público ni incluirlas en archivos versionados. Si el repositorio es privado, igualmente es preferible compartir las contraseñas por un canal separado y seguro.
 
