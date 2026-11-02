@@ -28,7 +28,7 @@ Las contraseñas no se publican en este repositorio. Su funcionamiento debe comp
 | Acceso a datos | `pg` |
 | Autenticación | JSON Web Token + bcryptjs |
 
-Las versiones detalladas y dependencias están documentadas en [Arquitectura y ambiente](README_ARQUITECTURA.md) y en los archivos `package.json` / `package-lock.json`.
+Las versiones detalladas y dependencias están documentadas en Readme_Arquitectura_optica y en los archivos `package.json` / `package-lock.json`.
 
 ## Módulos identificados
 
@@ -36,7 +36,7 @@ Autenticación, inicio, productos, inventario, movimientos, clientes, ventas, cr
 
 ## Estado de despliegue
 
-El sistema **no está desplegado en internet**. Actualmente se ejecuta de forma local en el equipo donde se configura. Las direcciones locales y los pasos para iniciarlo se encuentran en [Instalación y ejecución](README_INSTALACION.md).
+El sistema **no está desplegado en internet**. Actualmente se ejecuta de forma local en el equipo donde se configura. Las direcciones locales y los pasos para iniciarlo se encuentran en Readme_Instalacion_Optica
 
 ## Consideraciones
 
