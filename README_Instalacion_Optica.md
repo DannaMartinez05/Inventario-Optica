@@ -1,19 +1,23 @@
 # Instalación y ejecución — Inventario Óptica
 
-Esta guía permite preparar el proyecto y ejecutarlo localmente en un equipo de desarrollo.
+Esta guía explica cómo preparar, configurar e iniciar el sistema Inventario Óptica en un equipo de desarrollo. Está dirigida tanto al equipo responsable del proyecto como a los equipos que realizarán el testing cruzado.
 
 ## 1. Requisitos previos
 
-Instalar:
+Para instalar y ejecutar el proyecto se necesitan los siguientes programas:
 
-- Node.js, con una versión compatible con Vite 8 (se recomienda una versión LTS compatible; verificarla antes de instalar).
-- npm (incluido con Node.js).
-- PostgreSQL.
-- Un navegador moderno.
+| Programa | Versión |
+|---|---|
+| Node.js | 22.19.0 |
+| npm | Incluido con Node.js |
+| PostgreSQL | 17.11 |
+| Navegador | Chrome, Edge, Firefox u otro navegador moderno |
+| Visual Studio Code | Opcional |
+| pgAdmin 4 o psql | Opcional |
 
-Opcionales: Visual Studio Code y pgAdmin 4 o `psql`.
+Las versiones de Node.js y PostgreSQL corresponden al entorno de desarrollo del proyecto.
 
-Comprobar desde PowerShell:
+Comprobar las versiones desde PowerShell:
 
 ```powershell
 node -v
@@ -21,38 +25,100 @@ npm -v
 psql --version
 ```
 
-Las versiones exactas usadas durante el desarrollo deben confirmarse en el equipo original; el repositorio no fija la versión de Node.js ni de PostgreSQL.
+## 2. Ubicación del proyecto y del script SQL
 
-## 2. Preparar PostgreSQL y la base de datos
+El repositorio contiene el frontend, el backend, la documentación y el script SQL necesario para preparar la base de datos.
 
-### Si se utiliza la base original de la óptica
+La estructura principal es:
 
-Configurar el backend para conectarse a esa base existente. **No crear otra base para sustituirla, no restaurar un esquema encima de ella y no ejecutar datos ficticios, `DROP`, `TRUNCATE` ni scripts de reinicialización.**
-
-Antes de cualquier cambio:
-1. Realizar una copia de seguridad.
-2. Revisar el script y las tablas afectadas.
-3. Probar el cambio en una base de pruebas independiente.
-4. Aplicarlo a la base original únicamente con autorización.
-
-### Si se monta el sistema en un equipo nuevo
-
-Se necesita el respaldo o script SQL oficial, compatible con esta versión del backend. El ZIP del proyecto revisado no incluía el script SQL, por lo que debe solicitarse al responsable y entregarse junto con esta documentación antes de intentar una instalación desde cero.
-
-El esquema revisado utiliza, entre otras, las tablas `tenant` y `usuario`. El código de creación del administrador espera que exista un tenant con `id_tenant = 1`.
-
-**No ejecutar `datos_prueba.sql` sobre la base original.** Ese archivo, si se utiliza, debe reservarse para una base de pruebas vacía e independiente.
-
-## 3. Configurar el backend
-
-Desde la carpeta raíz del proyecto:
-
-```powershell
-cd backend
-npm ci
+```text
+Inventario Optica React/
+│
+├── backend/
+│   ├── .env.example
+│   ├── crearAdmin.js
+│   ├── database.js
+│   ├── server.js
+│   └── ...
+│
+├── frontend/
+│   ├── src/
+│   ├── package.json
+│   └── package-lock.json
+│
+├── crear_bd.sql
+├── README_Optica.md
+├── README_Instalacion_Optica.md
+└── README_Arquitectura_Optica.md
 ```
 
-Crear `backend/.env` a partir de `backend/.env.example` (si el archivo de ejemplo aún no está en el repositorio, crearlo con las variables siguientes):
+**Importante:** el archivo `crear_bd.sql` se encuentra en la raíz del repositorio, no dentro de las carpetas `backend` o `frontend`.
+
+Este archivo contiene el script SQL del proyecto y debe revisarse y ejecutarse en una base de datos nueva e independiente cuando se realice una instalación desde cero.
+
+## 3. Preparar PostgreSQL y la base de datos
+
+### 3.1. Crear una base de datos de pruebas
+
+Para realizar una instalación en otro equipo o desarrollar el testing cruzado, se recomienda crear una base de datos independiente.
+
+Por ejemplo, desde `psql`:
+
+```sql
+CREATE DATABASE inventario_optica;
+```
+
+También puede crearse desde pgAdmin 4.
+
+### 3.2. Ejecutar el script SQL
+
+El archivo que debe utilizarse es:
+
+```text
+crear_bd.sql
+```
+
+Se encuentra en la raíz del repositorio.
+
+Desde PowerShell, ubicado en la raíz del proyecto, se puede ejecutar:
+
+```powershell
+psql -U postgres -d inventario_optica -f .\crear_bd.sql
+```
+
+Reemplazar `postgres` por el usuario correspondiente de PostgreSQL si es diferente.
+
+Si se utiliza pgAdmin 4, abrir la base de datos de pruebas, ingresar al Query Tool, abrir el archivo `crear_bd.sql` y ejecutar el contenido.
+
+Después de la ejecución, comprobar que se hayan creado las tablas y relaciones necesarias.
+
+**Precauciones:**
+
+- No ejecutar el script sobre la base original de la óptica.
+- No utilizar datos reales de clientes para las pruebas.
+- No ejecutar scripts de reinicialización sobre bases que contengan información importante.
+- Si el script presenta errores, detener la instalación y revisar el mensaje antes de continuar.
+
+La instalación desde cero debe validarse en una base independiente antes de considerar reproducible el procedimiento.
+
+## 4. Configurar las variables de entorno del backend
+
+El repositorio incluye el archivo:
+
+```text
+backend/.env.example
+```
+
+Este archivo es una plantilla con las variables necesarias para configurar la conexión con PostgreSQL y el funcionamiento del backend.
+
+Para preparar el entorno local:
+
+1. Abrir la carpeta `backend`.
+2. Copiar el archivo `.env.example`.
+3. Renombrar la copia como `.env`.
+4. Modificar los valores según la configuración local.
+
+Ejemplo:
 
 ```env
 PORT=3000
@@ -60,149 +126,224 @@ FRONTEND_URL=http://localhost:5173
 
 DB_HOST=localhost
 DB_PORT=5432
-DB_NAME=NOMBRE_DE_LA_BASE
-DB_USER=USUARIO_POSTGRES
-DB_PASSWORD=CONTRASENA_POSTGRES
+DB_NAME=inventario_optica
+DB_USER=postgres
+DB_PASSWORD=TU_CONTRASENA_LOCAL
 
-JWT_SECRET=SECRETO_ALEATORIO_DE_AL_MENOS_32_CARACTERES
+JWT_SECRET=TU_SECRETO_ALEATORIO_DE_AL_MENOS_32_CARACTERES
 ```
 
-Reemplazar los valores de ejemplo por los del entorno local. El backend exige `JWT_SECRET` con al menos 32 caracteres.
+### Variables de entorno
 
 | Variable | Descripción |
 |---|---|
-| `PORT` | Puerto del backend. Por defecto, `3000`. |
-| `FRONTEND_URL` | Origen del frontend permitido por CORS. |
-| `DB_HOST` | Host del servidor PostgreSQL. |
-| `DB_PORT` | Puerto PostgreSQL; normalmente `5432`. |
-| `DB_NAME` | Nombre exacto de la base que utilizará la aplicación. |
+| `PORT` | Puerto del backend. Por defecto, 3000. |
+| `FRONTEND_URL` | Dirección del frontend permitida por CORS. |
+| `DB_HOST` | Dirección del servidor PostgreSQL. |
+| `DB_PORT` | Puerto de PostgreSQL. Normalmente 5432. |
+| `DB_NAME` | Nombre de la base de datos que utilizará el sistema. |
 | `DB_USER` | Usuario de PostgreSQL. |
-| `DB_PASSWORD` | Contraseña del usuario. |
-| `JWT_SECRET` | Secreto privado para firmar los tokens JWT; mínimo 32 caracteres. |
+| `DB_PASSWORD` | Contraseña del usuario de PostgreSQL. |
+| `JWT_SECRET` | Clave privada para firmar los tokens JWT. Debe tener al menos 32 caracteres. |
 
-No subir ni compartir el archivo `.env` real. El repositorio debe contener solo `.env.example` con valores ficticios.
+Cada equipo debe configurar su propio archivo `.env`.
 
-## 4. Instalar dependencias del frontend
+**Importante:** no subir el archivo `.env` real a GitHub. El repositorio debe conservar únicamente `.env.example`, sin contraseñas ni secretos personales.
 
-Abrir una segunda terminal desde la carpeta raíz:
+## 5. Instalar las dependencias del backend
+
+Abrir una terminal de PowerShell en la raíz del proyecto y ejecutar:
+
+```powershell
+cd backend
+npm ci
+```
+
+Este comando instala las dependencias registradas en `backend/package-lock.json`.
+
+## 6. Instalar las dependencias del frontend
+
+Abrir una segunda terminal desde la raíz del proyecto y ejecutar:
 
 ```powershell
 cd frontend
 npm ci
 ```
 
-`npm ci` instala las versiones definidas en `frontend/package-lock.json`.
+Este comando instala las dependencias registradas en `frontend/package-lock.json`.
 
-## 5. Usuarios de prueba
+## 7. Crear un administrador de pruebas
 
-El sistema dispone de cuentas de los roles **administrador** y **empleado** en el entorno actual. Para entregar el proyecto a otro equipo, registrar aquí los datos de las cuentas que se hayan verificado en la base de datos que acompañará la entrega.
+El proyecto incluye el archivo:
 
-| Rol | Correo de acceso | Contraseña |
-|---|---|---|
-| Administrador | `admin@ocadhas.com` | Admin123* |
-| Empleado | `dayen5525@gmail.com` | |
+```text
+backend/crearAdmin.js
+```
 
-**Antes de entregar:** sustituir los correos por los usuarios reales que se hayan probado. No subir contraseñas reales al repositorio público ni incluirlas en archivos versionados. Si el repositorio es privado, igualmente es preferible compartir las contraseñas por un canal separado y seguro.
+Este script permite crear un usuario con rol de administrador asociado al tenant con `id_tenant = 1`.
 
-El frontend revisado envía `tenant_id: 1` en el inicio de sesión. Los usuarios de prueba deben pertenecer al tenant correspondiente a ese identificador, o el código debe configurarse para el tenant correcto.
+Antes de ejecutarlo, comprobar que:
 
-## 6. Crear un administrador (solo si es necesario)
+- La base de datos de pruebas se haya preparado correctamente.
+- Exista el tenant con `id_tenant = 1`.
+- El correo que se utilizará no esté registrado.
+- La conexión del backend con PostgreSQL funcione.
 
-El proyecto incluye `backend/crearAdmin.js`. El script solicita nombre, correo y contraseña y crea un usuario con rol `admin` asociado a `id_tenant = 1`.
-
-Ejecutarlo únicamente si se ha confirmado que:
-- La base de datos está preparada y respaldada.
-- Existe el tenant `id_tenant = 1`.
-- El correo no está registrado.
-- El responsable autorizó crear el usuario.
-
-Desde `backend/`:
+Desde la carpeta `backend`, ejecutar:
 
 ```powershell
 node crearAdmin.js
 ```
 
-El código exige una contraseña de entre 12 y 72 caracteres. No ejecutar este script si el administrador ya existe.
+El script solicita los datos necesarios para crear el administrador.
 
-## 7. Iniciar la aplicación
+La contraseña debe cumplir las validaciones establecidas por el programa.
 
-Mantener dos terminales abiertas.
+No ejecutar el script sobre la base original de la óptica ni crear usuarios duplicados.
 
-**Terminal 1 — Backend**
+**Nota:** el administrador de pruebas debe pertenecer al tenant que utiliza el inicio de sesión del frontend. Actualmente, el frontend envía `tenant_id: 1`.
+
+## 8. Iniciar la aplicación
+
+Para ejecutar el sistema se necesitan dos terminales abiertas.
+
+### Terminal 1: iniciar el backend
+
+Desde la raíz del proyecto:
 
 ```powershell
 cd backend
 npm run dev
 ```
 
-El backend inicia por defecto en `http://localhost:3000`. Para iniciarlo sin Nodemon:
+El backend utiliza normalmente:
+
+```text
+http://localhost:3000
+```
+
+También puede iniciarse sin Nodemon mediante:
 
 ```powershell
 npm start
 ```
 
-**Terminal 2 — Frontend**
+### Terminal 2: iniciar el frontend
+
+Desde la raíz del proyecto:
 
 ```powershell
 cd frontend
 npm run dev
 ```
 
-Vite muestra la dirección local en la terminal. La configuración revisada utiliza normalmente:
+Vite utiliza normalmente:
 
 ```text
 http://localhost:5173
 ```
 
-Abrir esa dirección en el navegador.
+Abrir esa dirección en el navegador para acceder al sistema.
 
-## 8. Verificar el funcionamiento
+## 9. Verificar el funcionamiento
 
-- API: `http://localhost:3000/api/health`. Debe responder con estado `ok` y mensaje `API funcionando`.
-- Conexión de base de datos: `GET /api/health/db`. Requiere un token válido y devuelve el nombre de la base conectada.
-- Frontend: comprobar que aparece el inicio de sesión.
-- Acceso: probar las cuentas de administrador y empleado documentadas arriba.
-- Permisos: verificar que cada rol solo pueda acceder a las funciones autorizadas.
+Una vez iniciados los servicios, realizar las siguientes comprobaciones:
 
-La ruta de salud confirma que la API responde, pero no demuestra que todos los módulos estén correctos. Ejecutar los casos de prueba funcionales.
+| Comprobación | Resultado esperado |
+|---|---|
+| Backend | El servidor inicia sin errores. |
+| API | `http://localhost:3000/api/health` responde con estado correcto. |
+| Base de datos | El backend puede conectarse a PostgreSQL. |
+| Frontend | Se muestra la pantalla de inicio de sesión. |
+| Administrador | Puede iniciar sesión con la cuenta de pruebas creada. |
+| Permisos | El administrador puede acceder a las funciones autorizadas. |
 
-## 9. Comandos útiles
+La ruta de verificación de conexión a la base de datos es:
+
+```text
+GET /api/health/db
+```
+
+Esta ruta requiere un token válido.
+
+También se recomienda probar el acceso con un usuario de rol empleado y comprobar que los permisos correspondan a su perfil.
+
+## 10. Comandos útiles
 
 | Carpeta | Comando | Función |
 |---|---|---|
 | `backend/` | `npm ci` | Instalar dependencias. |
 | `backend/` | `npm run dev` | Iniciar backend en desarrollo. |
 | `backend/` | `npm start` | Iniciar backend. |
-| `backend/` | `node crearAdmin.js` | Crear administrador, si hace falta. |
+| `backend/` | `node crearAdmin.js` | Crear administrador de pruebas. |
 | `frontend/` | `npm ci` | Instalar dependencias. |
-| `frontend/` | `npm run dev` | Iniciar Vite. |
-| `frontend/` | `npm run build` | Crear compilación de producción. |
+| `frontend/` | `npm run dev` | Iniciar frontend. |
+| `frontend/` | `npm run build` | Generar compilación de producción. |
 | `frontend/` | `npm run preview` | Previsualizar compilación. |
 | `frontend/` | `npm run lint` | Ejecutar ESLint. |
 
-## 10. Problemas frecuentes
+## 11. Problemas frecuentes
 
-- **No conecta a PostgreSQL:** verificar que el servicio esté iniciado y revisar `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER` y `DB_PASSWORD`.
-- **Error de JWT:** revisar que `JWT_SECRET` exista y tenga al menos 32 caracteres.
-- **Error de CORS:** comprobar que `FRONTEND_URL` coincida con el origen real de Vite.
-- **No encuentra una tabla o columna:** comprobar que se restauró el SQL oficial correspondiente a esta versión. No ejecutar scripts desconocidos sobre la base original.
-- **Puerto ocupado:** liberar el puerto o cambiarlo y actualizar la configuración correspondiente.
-- **No carga el frontend:** ejecutar `npm ci` dentro de `frontend` y comprobar que Vite esté activo.
+**Error de conexión con PostgreSQL**
 
-## 11. Estado de despliegue
+- Verificar que el servicio PostgreSQL esté iniciado.
+- Revisar `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER` y `DB_PASSWORD`.
+- Comprobar que la base de datos exista.
 
-El sistema no tiene actualmente una URL pública de producción. Se ejecuta localmente:
+**Error de JWT**
+
+- Revisar que `JWT_SECRET` esté configurado.
+- Verificar que tenga al menos 32 caracteres.
+
+**Error de CORS**
+
+- Comprobar que `FRONTEND_URL` coincida con la dirección del frontend.
+
+**Error de tabla o columna inexistente**
+
+- Verificar que se haya ejecutado correctamente `crear_bd.sql`.
+- Comprobar que el backend esté conectado a la base de datos correcta.
+
+**Error al iniciar sesión**
+
+- Comprobar que el usuario exista y esté activo.
+- Verificar que pertenezca al tenant correspondiente.
+- Confirmar que el correo y la contraseña sean correctos.
+
+**Puerto ocupado**
+
+- Comprobar si otro proceso está utilizando el puerto.
+- Si se modifica el puerto, actualizar la configuración correspondiente.
+
+## 12. Estado de despliegue
+
+El sistema se ejecuta actualmente en un entorno local de desarrollo. No cuenta con una URL pública de producción.
+
+Direcciones habituales:
 
 - Frontend: `http://localhost:5173`
 - Backend: `http://localhost:3000`
+- PostgreSQL: `localhost:5432`
 
-Estas direcciones solo funcionan en el equipo donde se ejecutan los servicios (o desde equipos autorizados en la red, si se configura expresamente). No son enlaces públicos de internet.
+Las direcciones `localhost` corresponden al equipo donde se ejecutan los servicios. Para acceder desde otro equipo se necesita una configuración de red y permisos adecuada.
 
-## 12. Pendientes para una instalación reproducible
+## 13. Consideraciones para el testing cruzado
 
-1. Entregar el script o respaldo SQL oficial y compatible.
-2. Confirmar las versiones exactas de Node.js y PostgreSQL usadas en el equipo original.
-3. Incorporar `backend/.env.example` sin secretos.
-4. Completar los correos de las cuentas de prueba y verificar ambos accesos.
-5. Probar la instalación completa en un segundo equipo.
-6. Ejecutar los casos de prueba y documentar resultados.
+El otro equipo debe realizar la instalación utilizando el repositorio y sus propios datos de prueba.
+
+Se recomienda verificar los siguientes puntos:
+
+1. Descargar o clonar el repositorio.
+2. Instalar Node.js y PostgreSQL en las versiones indicadas.
+3. Crear una base de datos de pruebas independiente.
+4. Ejecutar `crear_bd.sql`, ubicado en la raíz del repositorio.
+5. Configurar `backend/.env` a partir de `backend/.env.example`.
+6. Instalar las dependencias del backend y frontend.
+7. Crear un administrador de pruebas.
+8. Iniciar ambos servicios.
+9. Comprobar el inicio de sesión.
+10. Probar los módulos y permisos del sistema.
+
+Los resultados del testing deben registrar los casos ejecutados, los resultados obtenidos y los errores encontrados.
+
+La instalación se considera reproducible cuando otro equipo puede preparar su propio entorno, iniciar el sistema e ingresar con sus cuentas de prueba sin depender de la base de datos original de la óptica.
