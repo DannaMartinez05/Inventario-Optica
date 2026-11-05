@@ -1,4 +1,3 @@
-
 require("dotenv").config();
 
 const bcrypt = require("bcryptjs");
@@ -30,7 +29,24 @@ async function crearAdmin() {
       throw new Error("Datos inválidos. Revisa el nombre, correo y contraseña.");
     }
 
-    const tenantId = 1;
+    const tenantId = Number(
+    (await preguntar("ID de la óptica (tenant): ")).trim()
+    );
+
+    if (!Number.isInteger(tenantId) || tenantId < 1) {
+      throw new Error("El ID de la óptica no es válido.");
+    }
+
+    const tenant = await pool.query(
+      `SELECT id_tenant
+      FROM tenant
+      WHERE id_tenant = $1 AND estado = 'activa'`,
+      [tenantId]
+    );
+
+    if (tenant.rowCount === 0) {
+      throw new Error("La óptica no existe o está inactiva.");
+    }
 
     const existente = await pool.query(
       "SELECT id_user FROM usuario WHERE LOWER(correo) = LOWER($1)",

@@ -1,4 +1,3 @@
-
 const express = require("express");
 const pool = require("../database");
 const {
@@ -155,7 +154,7 @@ router.post(
       const correoNormalizado = correo.trim().toLowerCase();
 
       const correoValido =
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correoNormalizado);
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correoNormalizado);
 
       if (!correoValido) {
         return res.status(400).json({

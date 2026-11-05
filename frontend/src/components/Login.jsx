@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import "../css/Login.css";
 import logo from "../assets/logo.png";
@@ -24,7 +25,6 @@ export default function Login({ onLogin }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          tenant_id: 1,
           correo: correo.trim(),
           password,
         }),
@@ -86,10 +86,7 @@ export default function Login({ onLogin }) {
       <section className="login-panel">
         <div className="login-form-container">
           <header className="login-brand-mobile">
-            <img
-              src={logo}
-              alt="Óptica Ocadhas"
-            />
+            <img src={logo} alt="Óptica Ocadhas" />
             <span>SISTEMA DE GESTIÓN</span>
           </header>
 
@@ -143,7 +140,9 @@ export default function Login({ onLogin }) {
                   aria-label={
                     mostrarPassword ? "Ocultar contraseña" : "Mostrar contraseña"
                   }
-                  title={mostrarPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                  title={
+                    mostrarPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+                  }
                 >
                   {mostrarPassword ? (
                     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -174,7 +173,9 @@ export default function Login({ onLogin }) {
                 type="button"
                 className="forgot-link"
                 onClick={() =>
-                  setError("Contacta al administrador para recuperar tu contraseña.")
+                  setError(
+                    "Contacta al administrador para recuperar tu contraseña."
+                  )
                 }
               >
                 ¿Olvidaste tu contraseña?
