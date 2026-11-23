@@ -8,8 +8,8 @@ La consulta realizada en la base `optica` identificó estas cuentas activas, amb
 
 | Rol | Correo | Estado |
 |---|---|---|
-| Administrador | `admin@ocadhas.com` | Activo |
-| Empleado | `dayen5525@gmail.com` | Activo |
+| Administrador | `admin@ocadhas.com` | Admin123* |
+| Empleado | `dayen5525@gmail.com` | Dayencita05* |
 
 Las contraseñas no se publican en este repositorio. Su funcionamiento debe comprobarse mediante el inicio de sesión.
 
