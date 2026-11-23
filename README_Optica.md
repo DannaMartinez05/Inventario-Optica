@@ -10,6 +10,7 @@ La consulta realizada en la base `optica` identificó estas cuentas activas, amb
 |---|---|---|
 | Administrador | `admin@ocadhas.com` | Admin123* |
 | Empleado | `dayen5525@gmail.com` | Dayencita05* |
+| Admin de nueva optica | `pupila@gmail.com` | pupilaoptica123 |
 
 Las contraseñas no se publican en este repositorio. Su funcionamiento debe comprobarse mediante el inicio de sesión.
 
